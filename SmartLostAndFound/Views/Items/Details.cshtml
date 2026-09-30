@@ -1,0 +1,68 @@
+@model SmartLostAndFound.Models.LostFoundItem
+
+@{
+    ViewData["Title"] = Model.Name;
+}
+
+<a asp-action="Index" class="back-link">&larr; All items</a>
+<h1>@Model.Name</h1>
+
+@if (TempData["ClaimMessage"] is string claimMessage)
+{
+    <p class="notice" role="status" aria-live="polite">@claimMessage</p>
+}
+
+<div class="item-detail-layout">
+    <div class="item-photo-frame">
+        @if (!string.IsNullOrEmpty(Model.ImagePath))
+        {
+            <img class="detail-image" src="@Model.ImagePath" alt="Photo of @Model.Name" />
+        }
+        else
+        {
+            <div class="image-placeholder" role="img" aria-label="No photo available for @Model.Name">No photo available</div>
+        }
+    </div>
+
+    <section class="item-information" aria-label="Item information">
+        <span class="status-pill @(Model.IsClaimed ? "status-claimed" : "status-available")">
+            @(Model.IsClaimed ? "Claimed" : "Available to claim")
+        </span>
+        <p class="item-description">@Model.Description</p>
+        <dl class="row">
+            <dt>Category</dt>
+            <dd>@Model.Category</dd>
+        </dl>
+    </section>
+</div>
+
+@if (Model.IsClaimed)
+{
+    <section class="pickup-panel" aria-labelledby="pickup-heading">
+        <h2 id="pickup-heading">Arrange pickup</h2>
+        <p>This item is marked as claimed. Contact the finder to agree on collection.</p>
+        @if (!string.IsNullOrWhiteSpace(Model.FinderEmail))
+        {
+            <p><strong>Finder:</strong> @Model.FinderName · <a href="mailto:@Model.FinderEmail">@Model.FinderEmail</a></p>
+            <p><strong>Pickup location:</strong> @Model.PickupLocation</p>
+            @if (!string.IsNullOrWhiteSpace(Model.PickupInstructions))
+            {
+                <p><strong>Instructions:</strong> @Model.PickupInstructions</p>
+            }
+        }
+        else
+        {
+            <p>Pickup contact details were not provided for this older listing. Please contact your local lost-and-found desk.</p>
+        }
+    </section>
+}
+else
+{
+    <section class="claim-panel" aria-labelledby="claim-heading">
+        <h2 id="claim-heading">Is this yours?</h2>
+        <p>Claim the item to see the finder’s contact and pickup details.</p>
+        <form asp-action="Claim" asp-route-id="@Model.Id" method="post" class="claim-form">
+            <button type="submit" class="btn">Claim item and arrange pickup</button>
+        </form>
+    </section>
+}

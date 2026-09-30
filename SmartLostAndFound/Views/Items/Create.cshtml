@@ -1,0 +1,68 @@
+@model LostFoundItem
+
+@{
+    ViewData["Title"] = "Create Item";
+}
+
+<h1>Create Lost & Found Item</h1>
+
+<form asp-action="Create" method="post" enctype="multipart/form-data">
+    <div asp-validation-summary="ModelOnly" class="validation-summary" role="alert"></div>
+    <div class="form-group">
+        <label asp-for="Name" class="control-label"></label>
+        <input asp-for="Name" class="form-control" />
+        <span asp-validation-for="Name" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="Description" class="control-label"></label>
+        <textarea asp-for="Description" class="form-control"></textarea>
+        <span asp-validation-for="Description" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="Category" class="control-label"></label>
+        <select asp-for="Category" class="form-control">
+            <option value="">Select Category</option>
+            <option value="Electronics">Electronics</option>
+            <option value="Clothing">Clothing</option>
+            <option value="Accessories">Accessories</option>
+            <option value="Other">Other</option>
+        </select>
+        <span asp-validation-for="Category" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label for="image">Item photo</label>
+        <input id="image" name="image" type="file" class="form-control" accept="image/jpeg,image/png,image/webp" aria-describedby="image-help" />
+        <span id="image-help" class="field-help">JPG, PNG, or WebP, up to 5 MB.</span>
+    </div>
+    <div class="form-group">
+        <label asp-for="FinderName">Your name</label>
+        <input asp-for="FinderName" class="form-control" autocomplete="name" required />
+        <span asp-validation-for="FinderName" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="FinderEmail">Contact email</label>
+        <input asp-for="FinderEmail" class="form-control" type="email" autocomplete="email" required />
+        <span asp-validation-for="FinderEmail" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="PickupLocation">Pickup location</label>
+        <input asp-for="PickupLocation" class="form-control" autocomplete="street-address" placeholder="For example, library reception" required />
+        <span asp-validation-for="PickupLocation" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="PickupInstructions">Pickup instructions (optional)</label>
+        <textarea asp-for="PickupInstructions" class="form-control" placeholder="When and how to arrange collection"></textarea>
+        <span asp-validation-for="PickupInstructions" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <button type="submit" class="btn">Post item</button>
+    </div>
+</form>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

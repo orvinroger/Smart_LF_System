@@ -1,0 +1,52 @@
+@model IEnumerable<LostFoundItem>
+
+@{
+    ViewData["Title"] = "Lost & Found Items";
+}
+
+<h1>Lost & Found Items</h1>
+
+<p>
+    <a asp-action="Create" class="btn btn-secondary">Report a Lost/Found Item</a>
+</p>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Photo</th>
+            <th>Item Name</th>
+            <th>Description</th>
+            <th>Category</th>
+            <th>Status</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @if (!string.IsNullOrEmpty(item.ImagePath))
+                    {
+                        <img class="item-thumbnail" src="@item.ImagePath" alt="Photo of @item.Name" />
+                    }
+                    else
+                    {
+                        <span class="no-photo" aria-label="No photo available">No photo</span>
+                    }
+                </td>
+                <td>@item.Name</td>
+                <td>@item.Description</td>
+                <td>@item.Category</td>
+                <td>
+                    <span class="status-pill @(item.IsClaimed ? "status-claimed" : "status-available")">
+                        @(item.IsClaimed ? "Claimed" : "Available")
+                    </span>
+                </td>
+                <td>
+                    <a asp-action="Details" asp-route-id="@item.Id" class="btn">View Details</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
